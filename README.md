@@ -48,9 +48,13 @@ medchecker/
 
 │
 
-|-- frontend/
+|-- templates/
 
-|   |-- index.html        # Main UI (HTML, CSS, JS)
+|   |-- index.html        # Main UI (HTML)
+
+|-- static
+
+|   |-- styles.css
 
 |   |-- script.js         # Client-side logic (search, profile, interactions)
 
