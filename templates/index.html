@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aushadhi — Indian Drug Checker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+  <!-- NOTICE -->
+  <div class="notice-banner" id="noticeBanner" style="text-align: center;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+    For informational purposes only. Always consult a doctor or pharmacist before using medication.
+    <button class="notice-close" onclick="document.getElementById('noticeBanner').style.display='none'">×</button>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a class="nav-logo" href="#" onclick="showPage('search')">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" />
+          <line x1="12" y1="8" x2="12" y2="16" />
+          <line x1="8" y1="12" x2="16" y2="12" />
+        </svg>
+      </div>
+      <div>
+        <div class="nav-logo-text">Aushadhi</div>
+        <div class="nav-logo-sub">Med Checker</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <button class="nav-btn active" id="nav-search" onclick="showPage('search')">Search</button>
+      <button class="nav-btn" id="nav-checker" onclick="showPage('checker')">Interactions</button>
+      <button class="nav-btn" id="nav-profile" onclick="showPage('profile')">My Profile</button>
+      <button class="nav-btn" id="nav-about" onclick="showPage('about')">About</button>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════
+     PAGE: SEARCH
+════════════════════════════════ -->
+  <div class="page active" id="page-search">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
+          Indian medicine database
+        </div>
+        <h1>Know your<br /><em>medicine.</em></h1>
+        <p class="hero-desc">Search by generic name or brand — Crocin, Dolo, Brufen, Ecosprin and hundreds more. Check
+          dosage, side effects and dangerous interactions.</p>
+        <div class="search-box">
+          <input type="text" id="mainSearch" placeholder="Try 'crocin', 'paracitamol', 'bp tablet'…"
+            autocomplete="off" />
+          <button onclick="doSearch()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            Search
+          </button>
+        </div>
+        <div class="hero-stats">
+          <span class="hero-stat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" />
+              <line x1="12" y1="8" x2="12" y2="16" />
+              <line x1="8" y1="12" x2="16" y2="12" />
+            </svg>
+            50+ medicines
+          </span>
+          <span class="hero-stat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="17 1 21 5 17 9" />
+              <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+              <polyline points="7 23 3 19 7 15" />
+              <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+            </svg>
+            Live interaction check
+          </span>
+          <span class="hero-stat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            No data stored. Profile stays on your device!
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <span class="filter-label">Category</span>
+      <button class="chip active" onclick="setFilter('',this)">All</button>
+      <button class="chip" onclick="setFilter('Analgesic',this)">Analgesic</button>
+      <button class="chip" onclick="setFilter('Antibiotic',this)">Antibiotic</button>
+      <button class="chip" onclick="setFilter('Antidiabetic',this)">Diabetes</button>
+      <button class="chip" onclick="setFilter('Antihypertensive',this)">BP / Heart</button>
+      <button class="chip" onclick="setFilter('Antacid / PPI',this)">Antacid</button>
+      <button class="chip" onclick="setFilter('Antihistamine',this)">Allergy</button>
+      <button class="chip" onclick="setFilter('Statin',this)">Cholesterol</button>
+      <div class="filter-right">
+        <select class="rx-select" id="rxFilter" onchange="applyFilters()">
+          <option value="">Rx + OTC</option>
+          <option value="otc">OTC only</option>
+          <option value="rx">Rx only</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-layout">
+      <div class="results-pane">
+        <div class="results-meta">
+          <span class="results-count" id="resultsCount">All medicines</span>
+        </div>
+        <div class="drug-list" id="drugList"></div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+      <div class="detail-pane">
+        <div id="detailPanel">
+          <div class="detail-empty">
+            <div class="detail-empty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" />
+                <line x1="12" y1="8" x2="12" y2="16" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+              </svg>
+            </div>
+            <div class="detail-empty-title">Select a medicine</div>
+            <div class="detail-empty-sub">Click any result to see dosage, side effects, precautions and check
+              interactions.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+     PAGE: INTERACTION CHECKER
+════════════════════════════════ -->
+  <div class="page" id="page-checker">
+    <div class="page-inner">
+      <div class="page-heading">Interaction checker</div>
+      <div class="page-sub">Enter two medicines to check whether they are safe to take together. Works with generic
+        names and Indian brand names.</div>
+
+      <div class="form-group">
+        <label class="form-label">First medicine</label>
+        <div class="suggest-wrap">
+          <input type="text" class="form-input" id="chk1"
+            placeholder="e.g. Paracetamol or Crocin"
+            autocomplete="off"
+            oninput="handleSuggest('chk1','drop1')"
+            onkeydown="handleSuggestKey(event,'chk1','drop1')" />
+          <div class="suggest-dropdown" id="drop1"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Second medicine</label>
+        <div class="suggest-wrap">
+          <input type="text" class="form-input" id="chk2"
+            placeholder="e.g. Ibuprofen or Brufen"
+            autocomplete="off"
+            oninput="handleSuggest('chk2','drop2')"
+            onkeydown="handleSuggestKey(event,'chk2','drop2')" />
+          <div class="suggest-dropdown" id="drop2"></div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="checkInteractionPage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="17 1 21 5 17 9" />
+          <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+          <polyline points="7 23 3 19 7 15" />
+          <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+        </svg>
+        Check interaction
+      </button>
+
+      <div id="checkerResult" style="margin-top:16px;"></div>
+
+      <div class="example-box">
+        <div class="example-box-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          Try these examples
+        </div>
+        <button class="example-btn" onclick="fillChecker('Warfarin','Ibuprofen')">⚠ Warfarin + Ibuprofen — high
+          risk</button>
+        <button class="example-btn" onclick="fillChecker('Sertraline','Tramadol')">⚠ Sertraline + Tramadol — serotonin
+          risk</button>
+        <button class="example-btn" onclick="fillChecker('Omeprazole','Clopidogrel')">◎ Omeprazole + Clopidogrel —
+          moderate</button>
+        <button class="example-btn" onclick="fillChecker('Paracetamol','Metformin')">✓ Paracetamol + Metformin — no
+          interaction</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+     PAGE: MY PROFILE
+════════════════════════════════ -->
+  <div class="page" id="page-profile">
+    <div class="page-inner">
+      <div class="page-heading">My profile</div>
+      <div class="page-sub">Your medical details are saved <strong>only on this device</strong> using browser
+        localStorage — nothing is sent to any server.</div>
+
+      <div id="profileLoadedBadge" class="profile-loaded-badge" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Profile loaded from your device
+      </div>
+
+      <div class="profile-warning-banner" id="profileWarning"></div>
+
+      <div class="profile-grid">
+        <div class="form-group profile-full">
+          <label class="form-label">Current medicines (comma separated)</label>
+          <input type="text" class="form-input" id="profMeds"
+            placeholder="e.g. Metformin, Atorvastatin, Clopidogrel" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Allergies</label>
+          <input type="text" class="form-input" id="profAllergies"
+            placeholder="e.g. Penicillin, Sulfa drugs" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <input type="number" class="form-input" id="profAge"
+            placeholder="e.g. 52" min="1" max="120" />
+        </div>
+        <div class="form-group profile-full">
+          <label class="form-label">Medical conditions</label>
+          <textarea class="form-input" id="profConditions"
+            placeholder="e.g. Type 2 diabetes, hypertension, asthma, thyroid"></textarea>
+        </div>
+        <div class="form-group profile-full">
+          <label class="form-label">Lifestyle notes</label>
+          <textarea class="form-input" id="profLifestyle"
+            placeholder="e.g. Non-smoker, vegetarian, occasional alcohol"></textarea>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="saveProfile()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        Save profile to this device
+      </button>
+      <button class="profile-clear-btn" onclick="clearProfile()">
+        Clear saved profile
+      </button>
+      <div class="save-toast" id="saveToast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="16 8 10 14 7 11" />
+        </svg>
+        Profile saved to your device.
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+     PAGE: ABOUT
+════════════════════════════════ -->
+  <div class="page" id="page-about">
+    <div class="page-inner-wide">
+      <div class="page-heading">About Aushadhi</div>
+      <div class="page-sub">An open, free medicine information tool built for Indian patients and caregivers — covering
+        generic drugs and popular Indian brand names.</div>
+
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="about-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+          <div class="about-card-title">Drug lookup</div>
+          <div class="about-card-text">Search by generic name or Indian brand name. Get dosage, uses, side effects and
+            precautions in plain language.</div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <polyline points="17 1 21 5 17 9" />
+              <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+              <polyline points="7 23 3 19 7 15" />
+              <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+            </svg>
+          </div>
+          <div class="about-card-title">Interaction checker</div>
+          <div class="about-card-text">Check if two medicines are safe to take together. Severity rated low, moderate or
+            high with safer alternatives suggested.</div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <div class="about-card-title">Personal profile</div>
+          <div class="about-card-text">Save your current medicines, allergies and conditions. Data stays on your device
+            — nothing is stored externally.</div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+          <div class="about-card-title">Privacy first</div>
+          <div class="about-card-text">No accounts, no tracking, no ads. Everything runs in your browser. Open source
+            and free forever.</div>
+        </div>
+      </div>
+
+      <div style="margin-top:36px;">
+        <div style="font-size:18px;font-weight:600;color:var(--teal-900);margin-bottom:6px;">What's coming</div>
+        <div style="font-size:14px;color:var(--gray-400);margin-bottom:0;">The roadmap for Aushadhi.</div>
+      </div>
+      <div class="roadmap-list">
+        <div class="roadmap-item">
+          <div class="roadmap-num">1</div>
+          <div class="roadmap-text"><strong>Flask backend + SQLite database</strong>Server-side search with FTS5,
+            paginated API, 500+ Indian drugs seeded from CDSCO and OpenFDA data.</div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-num">2</div>
+          <div class="roadmap-text"><strong>Combination drug support</strong>Combiflam = Ibuprofen + Paracetamol.
+            Interaction checks on each component automatically.</div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-num">3</div>
+          <div class="roadmap-text"><strong>Profile-aware warnings</strong>Cross-check your saved medicines against any
+            drug you search — automatic red flags on your dashboard.</div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-num">4</div>
+          <div class="roadmap-text"><strong>Hindi language support</strong>Search and read results in Hindi. Designed
+            for users who are more comfortable in their first language.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">Aushadhi</div>
+    <div class="footer-note">Not a substitute for professional medical advice. Always consult your doctor or pharmacist.
+    </div>
+  </footer>
+
+  <!-- WARNING MODAL -->
+  <div class="modal-overlay" id="warningModal">
+    <div class="modal-box">
+
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+      </div>
+
+      <h2>Important Warning</h2>
+
+      <p>This tool is for <strong>informational purposes only</strong>. Medication effects can vary by individual.
+        Always consult a doctor or pharmacist before making any changes to your medication regimen.</p>
+
+      <p>Never stop taking prescribed medication without first consulting your doctor.</p>
+
+      <div class="modal-divider"></div>
+
+      <button class="modal-btn" onclick="dismissWarning()">
+        I understand — continue
+      </button>
+
+    </div>
+  </div>
+
+  <script src="/static/script.js"> </script>
+</body>
+
+</html>
