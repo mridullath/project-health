@@ -21,14 +21,23 @@ The system combines fast full-text search (FTS5), fuzzy matching for typo correc
 Features->
 
 . Real-time medicine search with instant typing response
+
 . Intelligent fuzzy matching (handles spelling mistakes like paracitamol → paracetamol)
+
 . Support for generic + brand name search
+
 . Server-side pagination for efficient large dataset handling
+
 . Drug–drug interaction checker with severity levels
+
 . Profile-based instant interaction warnings
+
 . Local profile system using browser localStorage
+
 . Responsive single-page UI with smooth navigation
+
 . Suggestion system with “Did you mean?” corrections
+
 . Fast Flask backend with optimized SQLite queries
 
 --------------------------------------------------------------------------------------------
@@ -36,16 +45,27 @@ Features->
 Project Structure->
 
 medchecker/
+
 │
+
 |-- frontend/
+
 |   |-- index.html        # Main UI (HTML, CSS, JS)
+
 |   |-- script.js         # Client-side logic (search, profile, interactions)
+
 |
+
 |-- app.py            # Flask API routes
+
 |-- database.py       # Query logic, search, fuzzy matching
+
 |-- aushadhi_v2.db    # SQLite database (included for demo)
+
 |
+
 |-- requirements.txt
+
 |-- README.md
 
 --------------------------------------------------------------------------------------------
